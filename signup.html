@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do App/Sign Up</title>
+    <link rel="icon" type="icon/image-x" href="https://cdn.dribbble.com/users/1063591/screenshots/5547137/lists_-_to_do_app_icon_4x.png"/>
+    <link rel="stylesheet" href="signUp.css"/>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Sign Up</h1>
+        <label for="name">Name</label>
+        <input type="text" id="name" placeholder="Name" required/>
+
+        <label for="mail">Email</label>
+        <input type="email" id="mail" placeholder="Email" required/>
+
+        <label for="pass">Password</label>
+        <input type="password" id="pass" placeholder="Password" required/>
+
+        <button id="btn">Submit</button>
+    </div>
+    <script>
+        let name1 = document.querySelector('#name');
+        let mail1 = document.querySelector('#mail');
+        let pass1 = document.querySelector('#pass');
+
+        let btn = document.querySelector('#btn');
+
+        btn.addEventListener("click" , fun);
+        function fun()
+        {
+            let obj = {
+                name : name1.value ,
+                mail : mail1.value ,
+                pass : pass1.value ,
+                todos : []
+            }
+            console.log(obj);
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST" , "/abc");
+            xhr.send(JSON.stringify(obj));
+            xhr.onreadystatechange = ()=>
+        {
+            if(xhr.readyState==4 && xhr.status==200)
+        {
+            console.log(xhr.responseText);
+            window.location.href="/signin";
+        }
+        }
+        }   
+    </script>
+</body>
+</html>

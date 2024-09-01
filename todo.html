@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do App</title>
+    <link rel="icon" type="icon/image-x" href="https://cdn.dribbble.com/users/1063591/screenshots/5547137/lists_-_to_do_app_icon_4x.png"/>
+</head>
+
+<style>
+    body {
+        background: linear-gradient(135deg, #7ed8b3, #bcc4bc); /* Light green to light gray gradient */
+        color: #365058; /* Dark gray for text */
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Center the form container */
+    .parent {
+        width: 50%;
+        margin: 80px auto;
+        text-align: center;
+    }
+
+    /* Style the main title */
+    h1 {
+        font-size: 48px;
+        color: #068244; /* Dark green color */
+        margin-bottom: 30px;
+        text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Style input fields */
+    input {
+        border: 2px solid #4fa879; /* Muted green border */
+        width: 70%;
+        height: 40px;
+        margin-right: 10px;
+        padding: 0 15px;
+        background-color: #ffffff; /* White background */
+        color: #365058; /* Dark gray text */
+        font-size: 18px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        outline: none;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* Input focus effect */
+    input:focus {
+        border-color: #068244; /* Dark green focus border */
+        box-shadow: 0 4px 8px rgba(6, 130, 68, 0.3); /* Dark green shadow */
+    }
+
+    /* Style buttons */
+    button {
+        background-color: #04d474; /* Bright green color */
+        height: 45px;
+        padding: 0 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        color: #ffffff; /* White text */
+        border: none;
+        font-size: 18px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        outline: none;
+        /* Ensure buttons are not affected by flex container styling */
+        display: inline-block;
+    }
+
+    /* Button hover effect */
+    button:hover {
+        background-color: #068244; /* Dark green on hover */
+        transform: scale(1.05);
+    }
+
+    /* Style each todo item */
+    .main_todo_div {
+    display: grid;
+    grid-template-columns: 1fr 0.2fr;
+    align-items: center;
+    margin-top: 10px;
+    padding: 15px;
+    background-color: #ffffff; /* White background for todo items */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+    }
+
+        /* Hover effect for todo items */
+    .main_todo_div:hover {
+    background-color: #f1f9f9; /* Very light gray for hover effect */
+    }
+
+    /* Style list items */
+    li {
+    list-style: none;
+    font-size: 18px;
+    color: #365058; /* Dark gray text */
+    transition: color 0.3s ease;
+    }
+
+    /* Style delete buttons */
+    .deleteBtn {
+    background-color: #7ed8b3; /* Light green color */
+    height: 35px;
+    padding: 0 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    color: #ffffff; /* White text */
+    border: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    }   
+
+    /* Delete button hover effect */
+    .deleteBtn:hover {
+    background-color: #4fa879; /* Muted green on hover */
+    transform: scale(1.05);
+    }
+
+</style>
+
+<body>
+    <form>
+        <div class="parent">
+            <h1>Todo List</h1>
+            <input type="text" id="inputValue" placeholder="Enter your task">
+            <button class="btn">Add Todo</button>
+        </div>
+        <section class="todo-list-elem">
+            <!-- Todo items will be added dynamically here -->
+        </section>
+    </form>
+
+    <script>
+        let btn = document.querySelector(".btn");
+        let inpu = document.querySelector("#inputValue");
+        let mainTodoElem = document.querySelector(".todo-list-elem");
+    
+        // Add Todo Event
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+    
+            if (inpu.value != "") {
+                let xhr = new XMLHttpRequest();
+                xhr.open("POST", "/task", true);
+                xhr.setRequestHeader("Content-Type", "application/json");
+    
+                let obj = {
+                    todo: inpu.value
+                };
+                xhr.send(JSON.stringify(obj));
+    
+                xhr.onreadystatechange = () => {
+                    if (xhr.status == 200 && xhr.readyState == 4) {
+                        // Add new task to the list after server confirmation
+                        addTaskToDOM(inpu.value);
+                        inpu.value = ""; // Clear the input field
+                    }
+                }
+            }
+        });
+    
+        // Load Todos on Window Load
+        window.onload = (e) => {
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET", "/data", true);
+            xhr.send();
+            xhr.onreadystatechange = () => {
+                if (xhr.status == 200 && xhr.readyState == 4) {
+                    let obj = JSON.parse(xhr.responseText);
+                    let data = obj.data;
+                    let index = obj.indx;
+                    let array = data[index].todos;
+    
+                    array.forEach((item) => {
+                        addTaskToDOM(item.todo);
+                    });
+                }
+            }
+        };
+    
+        // Function to Add Task to the DOM
+        function addTaskToDOM(taskText) {
+            const divElem = document.createElement("div");
+            divElem.classList.add("main_todo_div");
+            divElem.innerHTML = `<li>${taskText}</li> <button class="deleteBtn">Delete</button>`;
+            mainTodoElem.appendChild(divElem);
+    
+            // Attach event listener to the delete button
+            const deleteBtn = divElem.querySelector(".deleteBtn");
+            deleteBtn.addEventListener("click", (e) =>{
+                e.preventDefault();
+                deleteTodoItem(divElem, taskText);
+            });
+        }
+    
+        // Function to Delete Task from Server and DOM
+        function deleteTodoItem(divElem, todoText) {
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", "/del", true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(JSON.stringify({ todo: todoText })); // Send the specific todo text to the server
+
+            xhr.onreadystatechange = () => {
+                if (xhr.status == 200 && xhr.readyState == 4) {
+                    divElem.remove(); // Remove the to-do item from the page
+                }
+            };
+    
+           
+        }
+    </script>
+    
+
+</body>
+</html>

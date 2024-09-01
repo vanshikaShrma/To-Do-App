@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Todo App</title>
+        <link rel="icon" type="icon/image-x" href="https://cdn.dribbble.com/users/1063591/screenshots/5547137/lists_-_to_do_app_icon_4x.png"/>
+        <style>
+            /* Apply a soft gradient background to the body */
+            body {
+            background: linear-gradient(135deg, #7ed8b3, #bcc4bc); /* Light green to light gray gradient */
+            color: #365058; /* Dark gray for text */
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column; /* Stack children vertically */
+            align-items: center;
+            height: 100vh;
+            justify-content: center; /* Center children vertically */
+            }
+
+            /* Style heading */
+            h1 {
+            position: absolute;
+            top: 10px;
+            font-size: 48px;
+            color: #068244; /* Dark green color */
+            margin: 20px 0; /* Space around the heading */
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+            }
+
+            /* Style button container to place buttons on the same line */
+            .button-container {
+            display: flex;
+            justify-content: center; /* Center buttons horizontally */
+            gap: 20px; /* Space between buttons */
+            }
+
+            /* Style buttons */
+            button {
+            background-color: #04d474; /* Bright green color */
+            height: 45px;
+            width: 150px; /* Fixed width for buttons */
+            padding: 0 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            color: #ffffff; /* White text */
+            border: none;
+            font-size: 18px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            outline: none;
+            }
+
+            /* Button hover effect */
+            button:hover {
+            background-color: #068244; /* Dark green on hover */
+            transform: scale(1.05);
+            }
+
+            /* Specific button styles */
+            button#btnUp {
+            background-color: #04d474; /* Bright green color for Sign Up button */
+            }
+
+            button#btnIn {
+            background-color: #4fa879; /* Muted green color for Sign In button */
+            }
+
+            /* Button hover effect specific to each button */
+            button#btnUp:hover {
+            background-color: #068244; /* Dark green on hover */
+            }
+
+            button#btnIn:hover {
+            background-color: #365058; /* Dark gray on hover */
+            }
+        </style>
+    </head>
+    <body>
+        <h1>To do App</h1>
+        <div class="button-container">
+            <button id="btnUp" aria-label="Sign Up">Sign Up</button>
+            <button id="btnIn" aria-label="Sign In">Sign In</button>
+        </div>
+        <script src="script1.js"></script>
+    </body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do App/Sign In</title>
+    <link rel="icon" type="icon/image-x" href="https://cdn.dribbble.com/users/1063591/screenshots/5547137/lists_-_to_do_app_icon_4x.png"/>
+    <link rel="stylesheet" href="signIn.css"/>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Sign In</h1>
+        <label for="mail">Email</label>
+        <input type="email" id="mail" placeholder="Email" required/>
+
+        <label for="pass">Password</label>
+        <input type="password" id="pass" placeholder="Password" required/>
+
+        <button id="btn">Submit</button>
+        <p id="para">Invalid Credentials</p>
+    </div>
+    <script>
+        let btn = document.querySelector('#btn');
+        let mail = document.querySelector('#mail');
+        let pass = document.querySelector('#pass');
+        let para = document.querySelector('#para');
+
+        btn.addEventListener("click" , fun);
+
+        function fun()
+        {
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST" , "/datain");
+            let obj = {
+                email : mail.value ,
+                password : pass.value
+            };
+            xhr.send(JSON.stringify(obj));
+            xhr.onreadystatechange = ()=>{
+
+                if(xhr.readyState == 4 && xhr.status==200)
+                {
+                    window.location.href= "/todo";
+                }
+                else if(xhr.status==401)
+                {
+                    para.style.display = "block";
+                }
+            }
+
+        }
+
+
+
+    </script>
+</body>
+</html>
